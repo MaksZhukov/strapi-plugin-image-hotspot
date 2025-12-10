@@ -64,5 +64,14 @@
   },
   "name": "strapi-plugin-image-hotspot",
   "description": "Custom field for adding interactive hotspots to images",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/MaksZhukov/strapi-plugin-image-hotspot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MaksZhukov/strapi-plugin-image-hotspot/issues"
+  },
+  "homepage": "https://github.com/MaksZhukov/strapi-plugin-image-hotspot#readme",
+  "author": "Maksim Zhukau <maks_zhukov_97@mail.ru>"
 }
