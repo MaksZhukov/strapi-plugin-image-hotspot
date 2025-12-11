@@ -19,10 +19,21 @@ A Strapi v5 plugin that provides a custom field for adding interactive hotspots 
   - **Tooltip**: Show tooltip text on hover
   - **Callback**: Execute custom JavaScript functions
   - **None**: No action
+- **Automatic Image Population**: Server-side middleware automatically populates image fields in API responses, so you get full image objects instead of just IDs
 
 ## Installation
 
 This plugin is automatically loaded by Strapi when placed in the `src/plugins` directory.
+
+### Server-Side Features
+
+The plugin includes server-side middleware that automatically:
+
+- Intercepts API responses for content types using the image-hotspot field
+- Populates image references with full media objects (including URL, alternative text, etc.)
+- Works with both single entity and collection responses
+
+This means when you fetch data via the API, the `image` field in your hotspot data will already contain the full media object, not just an ID.
 
 ## Usage
 
@@ -97,9 +108,11 @@ window.handleHotspotClick = function (params) {
 When rendering the image with hotspots on your frontend, you'll need to:
 
 1. Parse the JSON data from the custom field
-2. Render the image
+2. Render the image (the image object is automatically populated by the server)
 3. Position hotspots based on their coordinates
 4. Handle click events based on the action type
+
+**Note**: The server automatically populates the `image` field with the full media object, so you can directly access `data.image.url` without needing to fetch the media separately.
 
 **Example React component:**
 
