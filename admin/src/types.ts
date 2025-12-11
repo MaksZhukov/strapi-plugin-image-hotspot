@@ -50,7 +50,7 @@ export interface Image {
 }
 
 export interface ImageHotspotValue {
-  image?: Image;
+  image: number;
   hotspots?: Hotspot[];
 }
 

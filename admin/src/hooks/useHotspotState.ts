@@ -1,7 +1,6 @@
-import { useCallback, useMemo, useState } from "react";
-import { useRef } from "react";
+import { useCallback, useState } from "react";
 import { useEffect } from "react";
-import { Hotspot, ImageHotspotValue } from "../types";
+import { Hotspot, Image, ImageHotspotValue } from "../types";
 import { normalizeHotspots } from "../utils";
 
 export const useHotspotState = (
@@ -14,45 +13,42 @@ export const useHotspotState = (
   const [hotspots, setHotspots] = useState<Hotspot[]>(
     initialValue?.hotspots ? normalizeHotspots(initialValue.hotspots) : [],
   );
-  const [imageData, setImageData] = useState<ImageHotspotValue["image"] | null>(
+
+  const [imageData, setImageData] = useState<Image | null>(null);
+  const [imageId, setImageId] = useState<number | null>(
     initialValue?.image || null,
   );
-  const previousValueRef = useRef<string | null>(null);
-  const isInitialMount = useRef(true);
 
-  // Update parent form when value changes
   useEffect(() => {
-    // Always send a value object when there's an image, null otherwise
-    // This ensures the data structure is consistent
-
-    const newValue: ImageHotspotValue | null = imageData
-      ? {
-          image: imageData,
-          hotspots: hotspots || [],
+    const fetchImageData = async () => {
+      if (imageId && typeof imageId === "number") {
+        try {
+          const response = await fetch(`/api/upload/files/${imageId}`);
+          if (response.ok) {
+            const data = await response.json();
+            setImageData(data);
+          } else {
+            console.error("Failed to fetch image data:", response.statusText);
+            setImageId(null);
+            setImageData(null);
+          }
+        } catch (error) {
+          setImageData(null);
         }
-      : null;
-    const newValueStr = JSON.stringify(newValue);
-
-    // Skip onChange on initial mount to prevent form validation issues
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      previousValueRef.current = newValueStr;
-      // Still send the initial value to ensure it's saved
-      if (newValue !== null) {
-        onChange({
-          target: {
-            name,
-            value: newValue,
-            type: "json",
-          },
-        });
       }
-      return;
-    }
+    };
 
-    // Only call onChange if the value actually changed
-    if (previousValueRef.current !== newValueStr) {
-      previousValueRef.current = newValueStr;
+    fetchImageData();
+  }, [imageId, name, onChange]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const newValue: ImageHotspotValue | null = imageId
+        ? {
+            image: imageId,
+            hotspots: hotspots || [],
+          }
+        : null;
       onChange({
         target: {
           name,
@@ -60,11 +56,21 @@ export const useHotspotState = (
           type: "json",
         },
       });
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [imageId, hotspots, name, onChange]);
+
+  // When image is selected, extract the ID and store both ID and data
+  const handleImageSet = useCallback((asset: Image) => {
+    if (asset?.id) {
+      setImageId(asset.id);
+      setImageData(asset);
     }
-  }, [imageData, hotspots, name, onChange]);
+  }, []);
 
   const handleImageRemove = useCallback(() => {
     setImageData(null);
+    setImageId(null);
     setHotspots([]);
   }, []);
 
@@ -72,7 +78,8 @@ export const useHotspotState = (
     hotspots,
     setHotspots,
     imageData,
-    setImageData,
+    setImageData: handleImageSet,
+    imageId,
     handleImageRemove,
   };
 };

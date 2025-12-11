@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useIntl } from "react-intl";
 import { Box, Typography, Field } from "@strapi/design-system";
-import type { HotspotType, ImageHotspotProps } from "../types";
+import type { HotspotType, Image, ImageHotspotProps } from "../types";
 import { useStrapiApp } from "@strapi/strapi/admin";
 import { ImageSelector } from "./ImageSelector";
 import { HotspotEditor } from "./HotspotEditor";
@@ -24,11 +24,9 @@ const ImageHotspot: React.FC<ImageHotspotProps> = ({
     "media-library",
     (state: any) => state.components["media-library"],
   );
-  const { formatMessage } = useIntl();
   const imageRef = useRef<HTMLImageElement>(null);
   const [selectionMode, setSelectionMode] = useState<HotspotType>("point");
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
-
   // Manage hotspot and image state
   const { hotspots, setHotspots, imageData, setImageData, handleImageRemove } =
     useHotspotState(value, name, onChange);
@@ -47,7 +45,7 @@ const ImageHotspot: React.FC<ImageHotspotProps> = ({
   } = useHotspotOperations(hotspots, setHotspots);
 
   const handleSelectAssets = useCallback(
-    (assets: any[]) => {
+    (assets: Image[]) => {
       if (assets && assets.length > 0) {
         const asset = assets[0];
         setImageData(asset);
