@@ -15,18 +15,24 @@ export const useHotspotState = (
   );
 
   const [imageData, setImageData] = useState<Image | null>(null);
-  const [imageId, setImageId] = useState<number | null>(
+  const [imageId, setImageId] = useState<string | null>(
     initialValue?.image || null,
   );
 
   useEffect(() => {
     const fetchImageData = async () => {
-      if (imageId && typeof imageId === "number") {
+      if (imageId && typeof imageId === "string") {
         try {
-          const response = await fetch(`/api/upload/files/${imageId}`);
+          const response = await fetch(
+            `/api/upload/files?filters[documentId][$eq]=${imageId}`,
+          );
           if (response.ok) {
             const data = await response.json();
-            setImageData(data);
+            if (data.length > 0) {
+              setImageData(data[0]);
+            } else {
+              throw new Error("Image not found");
+            }
           } else {
             console.error("Failed to fetch image data:", response.statusText);
             setImageId(null);
@@ -63,7 +69,7 @@ export const useHotspotState = (
   // When image is selected, extract the ID and store both ID and data
   const handleImageSet = useCallback((asset: Image) => {
     if (asset?.id) {
-      setImageId(asset.id);
+      setImageId(asset.documentId);
       setImageData(asset);
     }
   }, []);

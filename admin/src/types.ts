@@ -40,6 +40,7 @@ export interface Hotspot {
 
 export interface Image {
   id: number;
+  documentId: string;
   url?: string;
   formats?: {
     [key: string]: {
@@ -50,7 +51,7 @@ export interface Image {
 }
 
 export interface ImageHotspotValue {
-  image: number;
+  image: string;
   hotspots?: Hotspot[];
 }
 
