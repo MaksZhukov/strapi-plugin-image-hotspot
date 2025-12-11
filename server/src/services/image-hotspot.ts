@@ -71,6 +71,8 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
               .findOne({ documentId: imageId });
             if (media) {
               entity[key].image = media;
+            } else {
+              entity[key] = null;
             }
           } catch (error) {
             strapi.log.warn(

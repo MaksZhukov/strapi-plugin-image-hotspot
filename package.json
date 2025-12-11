@@ -1,6 +1,15 @@
 {
   "version": "1.0.2",
-  "keywords": [],
+  "keywords": [
+    "strapi",
+    "strapi-plugin",
+    "image",
+    "hotspot",
+    "image-hotspot",
+    "custom-field",
+    "interactive",
+    "cms"
+  ],
   "type": "commonjs",
   "exports": {
     "./package.json": "./package.json",
