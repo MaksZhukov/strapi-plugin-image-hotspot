@@ -18,6 +18,7 @@ A Strapi v5 plugin that provides a custom field for adding interactive hotspots 
   - **Modal**: Display content in a modal dialog
   - **Tooltip**: Show tooltip text on hover
   - **Callback**: Execute custom JavaScript functions
+  - **Custom**: Define custom actions with name and JSON payload
   - **None**: No action
 - **Automatic Image Population**: Server-side middleware automatically populates image fields in API responses, so you get full image objects instead of just IDs
 
@@ -103,6 +104,48 @@ window.handleHotspotClick = function (params) {
 };
 ```
 
+#### Custom Action
+
+Define a custom action with a name and JSON payload for flexible frontend handling:
+
+- `customName`: Name identifier for the custom action (e.g., `"product-detail"`)
+- `customPayload`: JSON object with any data structure you need
+
+**Example:**
+
+```json
+{
+  "type": "custom",
+  "customName": "product-detail",
+  "customPayload": {
+    "productId": "123",
+    "variant": "blue",
+    "showModal": true
+  }
+}
+```
+
+On the frontend, you can handle custom actions based on the `customName` and use the `customPayload` as needed:
+
+```javascript
+function handleHotspotClick(hotspot) {
+  if (hotspot.action?.type === "custom") {
+    switch (hotspot.action.customName) {
+      case "product-detail":
+        // Handle product detail action
+        showProductDetail(hotspot.action.customPayload);
+        break;
+      default:
+        console.log(
+          "Custom action:",
+          hotspot.action.customName,
+          hotspot.action.customPayload,
+        );
+    }
+  }
+}
+```
+
 ### Using in Frontend
 
 When rendering the image with hotspots on your frontend, you'll need to:
@@ -142,6 +185,15 @@ function HotspotImage({ data }: { data: ImageHotspotValue }) {
         ) {
           window[hotspot.action.callbackName](hotspot.action.callbackParams);
         }
+        break;
+      case "custom":
+        // Handle custom action based on customName and customPayload
+        console.log(
+          "Custom action:",
+          hotspot.action.customName,
+          hotspot.action.customPayload,
+        );
+        // Implement your custom action handling logic here
         break;
     }
   };
