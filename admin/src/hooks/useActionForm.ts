@@ -9,6 +9,8 @@ interface ActionFormState {
   tooltipText: string;
   callbackName: string;
   callbackParams: string;
+  customName: string;
+  customPayload: string;
   contentType: string;
   entryId: string;
 }
@@ -24,6 +26,10 @@ const getInitialFormState = (
   callbackName: action?.callbackName || "",
   callbackParams: action?.callbackParams
     ? JSON.stringify(action.callbackParams, null, 2)
+    : "",
+  customName: action?.customName || "",
+  customPayload: action?.customPayload
+    ? JSON.stringify(action.customPayload, null, 2)
     : "",
   contentType: action?.contentType || "",
   entryId: action?.entryId ? String(action.entryId) : "",
@@ -84,6 +90,16 @@ export const useActionForm = (action: HotspotAction | undefined) => {
             : undefined;
         } catch {
           newAction.callbackParams = undefined;
+        }
+        break;
+      case "custom":
+        newAction.customName = formState.customName;
+        try {
+          newAction.customPayload = formState.customPayload
+            ? JSON.parse(formState.customPayload)
+            : undefined;
+        } catch {
+          newAction.customPayload = undefined;
         }
         break;
     }

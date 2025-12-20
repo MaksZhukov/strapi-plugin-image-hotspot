@@ -36,9 +36,9 @@ const actionTypeOptions = [
     defaultMessage: "Callback",
   },
   {
-    value: "relation",
-    id: "image-hotspot.action-relation",
-    defaultMessage: "Relation",
+    value: "custom",
+    id: "image-hotspot.action-custom",
+    defaultMessage: "Custom",
   },
 ] as const;
 

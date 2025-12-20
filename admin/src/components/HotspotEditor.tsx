@@ -2,13 +2,13 @@ import React, { RefObject } from "react";
 import { useIntl } from "react-intl";
 import { Box, Button, Flex, Typography } from "@strapi/design-system";
 import styled from "styled-components";
-import type { HotspotType, Hotspot } from "../types";
+import type { HotspotType, Hotspot, Image } from "../types";
 import { HotspotMarker } from "./HotspotMarker";
 import { RectangleMarker } from "./RectangleMarker";
 
 interface HotspotEditorProps {
   imageUrl: string;
-  imageData: { id: number; url?: string; alternativeText?: string };
+  imageData: Image;
   hotspots: Hotspot[];
   selectionMode: HotspotType;
   isDrawingRectangle: boolean;
@@ -46,16 +46,15 @@ interface DrawingRectangleProps {
 const ImageContainer = styled.div<ImageContainerProps>`
   position: ${(props) => props.$position};
   display: inline-block;
-  width: 100%;
+  overflow: auto;
 `;
 
 const HotspotImage = styled.img<HotspotImageProps>`
-  width: 100%;
-  height: auto;
   display: block;
   cursor: ${(props) => props.$cursor};
   user-select: none;
   pointer-events: auto;
+  max-width: initial;
   position: relative;
   z-index: ${(props) => props.$zIndex};
 `;
@@ -135,45 +134,49 @@ export const HotspotEditor: React.FC<HotspotEditorProps> = ({
         </Flex>
       </Box>
 
-      <ImageContainer $position="relative">
-        <HotspotImage
-          ref={imageRef}
-          src={imageUrl || ""}
-          alt={imageData?.alternativeText || "Image with hotspots"}
-          onMouseDown={onImageMouseDown}
-          $cursor="crosshair"
-          $zIndex={1}
-        />
-        {isDrawingRectangle && currentRectangle && (
-          <DrawingRectangle
-            $x={currentRectangle.x}
-            $y={currentRectangle.y}
-            $width={currentRectangle.width}
-            $height={currentRectangle.height}
-            $zIndex={5}
+      <Box width="100%" overflow="auto">
+        <ImageContainer $position="relative">
+          <HotspotImage
+            ref={imageRef}
+            src={imageUrl || ""}
+            width={imageData?.width}
+            height={imageData?.height}
+            alt={imageData?.alternativeText || "Image with hotspots"}
+            onMouseDown={onImageMouseDown}
+            $cursor="crosshair"
+            $zIndex={1}
           />
-        )}
-        {hotspots.map((hotspot, index) =>
-          hotspot.type === "point" ? (
-            <HotspotMarker
-              key={hotspot.id}
-              hotspot={hotspot}
-              number={index + 1}
-              onDrag={onHotspotDrag}
-              imageRef={imageRef}
+          {isDrawingRectangle && currentRectangle && (
+            <DrawingRectangle
+              $x={currentRectangle.x}
+              $y={currentRectangle.y}
+              $width={currentRectangle.width}
+              $height={currentRectangle.height}
+              $zIndex={5}
             />
-          ) : (
-            <RectangleMarker
-              key={hotspot.id}
-              hotspot={hotspot}
-              number={index + 1}
-              onDrag={onHotspotDrag}
-              onResize={onRectangleResize}
-              imageRef={imageRef}
-            />
-          ),
-        )}
-      </ImageContainer>
+          )}
+          {hotspots.map((hotspot, index) =>
+            hotspot.type === "point" ? (
+              <HotspotMarker
+                key={hotspot.id}
+                hotspot={hotspot}
+                number={index + 1}
+                onDrag={onHotspotDrag}
+                imageRef={imageRef}
+              />
+            ) : (
+              <RectangleMarker
+                key={hotspot.id}
+                hotspot={hotspot}
+                number={index + 1}
+                onDrag={onHotspotDrag}
+                onResize={onRectangleResize}
+                imageRef={imageRef}
+              />
+            ),
+          )}
+        </ImageContainer>
+      </Box>
 
       <Box marginTop={2}>
         <Typography variant="pi" textColor="neutral600">

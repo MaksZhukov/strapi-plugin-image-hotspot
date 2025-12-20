@@ -76,6 +76,7 @@ export const useHotspotOperations = (
   const handleCreatePoint = useCallback(
     (x: number, y: number) => {
       const newHotspot = createPointHotspot(x, y, hotspots);
+      console.log(newHotspot);
       setHotspots((prev) => [...prev, newHotspot]);
     },
     [hotspots, setHotspots],

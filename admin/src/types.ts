@@ -7,7 +7,8 @@ export type HotspotActionType =
   | "link"
   | "modal"
   | "tooltip"
-  | "callback";
+  | "callback"
+  | "custom";
 
 export interface HotspotAction {
   type: HotspotActionType;
@@ -22,6 +23,9 @@ export interface HotspotAction {
   // For 'callback' action
   callbackName?: string;
   callbackParams?: Record<string, any>;
+  // For 'custom' action
+  customName?: string;
+  customPayload?: Record<string, any>;
   // For 'relation' action
   contentType?: string; // e.g., "api::article.article"
   entryId?: number | string;
@@ -48,6 +52,8 @@ export interface Image {
     };
   };
   alternativeText?: string;
+  width: number;
+  height: number;
 }
 
 export interface ImageHotspotValue {

@@ -8,6 +8,7 @@ import { LinkActionFields } from "./LinkActionFields";
 import { ModalActionFields } from "./ModalActionFields";
 import { TooltipActionFields } from "./TooltipActionFields";
 import { CallbackActionFields } from "./CallbackActionFields";
+import { CustomActionFields } from "./CustomActionFields";
 
 interface ActionEditorProps {
   action: HotspotAction | undefined;
@@ -59,6 +60,14 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({
         params={formState.callbackParams}
         onNameChange={(name) => updateField("callbackName", name)}
         onParamsChange={(params) => updateField("callbackParams", params)}
+      />
+    ),
+    custom: (
+      <CustomActionFields
+        name={formState.customName}
+        payload={formState.customPayload}
+        onNameChange={(name) => updateField("customName", name)}
+        onPayloadChange={(payload) => updateField("customPayload", payload)}
       />
     ),
     none: null,
