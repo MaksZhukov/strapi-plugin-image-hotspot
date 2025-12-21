@@ -28,6 +28,8 @@ The Image Hotspot Plugin is a Strapi v5 custom field that enables content editor
 
 The plugin stores hotspot data as JSON, making it easy to consume in any frontend framework. The server-side middleware ensures that when you fetch content via the API, the image field is automatically populated with the full media object (including URL, alternative text, etc.), not just an ID.
 
+![Image Hotspot Plugin in Strapi Admin Panel](./strapi_filled_field.png)
+
 ## Why I Built It
 
 I worked on a project requiring interactive product images, where users could click on different parts to learn about specific features. I searched for existing solutions but couldn't find any suitable ones.
@@ -286,6 +288,10 @@ In your content type schema:
 ### Frontend Implementation
 
 Here's a React example for rendering hotspots:
+
+![Frontend Implementation with Image Formats](./frontend_implementation_image_formats.png)
+
+![Frontend Implementation with Original Size](./frontend_implementation_original_size.png)
 
 ```tsx
 function HotspotImage({ data }: { data: ImageHotspotValue }) {
