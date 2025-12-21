@@ -390,7 +390,3 @@ Building a custom field plugin for Strapi v5 was a rewarding experience that com
 Whether you're building an e-commerce platform, an educational website, or any application that benefits from interactive images, the Image Hotspot Plugin provides a flexible, easy-to-use solution that integrates seamlessly with Strapi.
 
 If you're interested in creating your own Strapi plugin, I encourage you to explore the [Strapi Plugin Development documentation](https://docs.strapi.io/dev-docs/plugins) and start building. The plugin ecosystem is growing, and there's always room for innovative solutions that make content management easier and more powerful.
-
----
-
-**About the Author**: Maksim Zhukau is a developer passionate about creating tools that make content management more intuitive and powerful. You can find more of his work on [GitHub](https://github.com/MaksZhukov).
